@@ -1,0 +1,28 @@
+name: Run Theros Bot Daily
+
+on:
+  schedule:
+    # Rozana raat 8:00 PM PKT (UTC 15:00) par chalega
+    - cron: '30 18 * * *'
+  workflow_dispatch: # Isse manual button bhi on rahega
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          playwright install --with-deps chromium
+
+      - name: Run Python Bot
+        run: python bot.py
